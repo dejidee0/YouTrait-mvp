@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import TraitBubble from "./TraitBubble";
 import { SAMPLE_TRAITS } from "../lib/constants";
-import { generateTraitSuggestions } from "../lib/openai";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -14,8 +13,10 @@ export default function TraitSelection({ onComplete }) {
   const [suggestedTraits, setSuggestedTraits] = useState([]);
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setSuggestedTraits(SAMPLE_TRAITS.slice(0, 15));
   }, []);
 
@@ -32,8 +33,17 @@ export default function TraitSelection({ onComplete }) {
 
     setLoading(true);
     try {
-      const suggestions = await generateTraitSuggestions(bio, selectedTraits);
-      setSuggestedTraits([...new Set([...suggestions, ...suggestedTraits])]);
+      // Fallback suggestions for now
+      const fallbackSuggestions = [
+        "creative",
+        "empathetic",
+        "adventurous",
+        "witty",
+        "loyal",
+      ];
+      setSuggestedTraits([
+        ...new Set([...fallbackSuggestions, ...suggestedTraits]),
+      ]);
     } catch (error) {
       console.error("Error getting AI suggestions:", error);
     }
@@ -45,6 +55,14 @@ export default function TraitSelection({ onComplete }) {
       onComplete(selectedTraits);
     }
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4 py-8">

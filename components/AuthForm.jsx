@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useStore } from "../lib/store";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -15,34 +14,62 @@ export default function AuthForm({ onSuccess }) {
     username: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const { signUp, signIn, loading } = useStore();
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      let result;
-      if (isSignUp) {
-        result = await signUp(
-          formData.email,
-          formData.password,
-          formData.username
-        );
-      } else {
-        result = await signIn(formData.email, formData.password);
-      }
+      const { createClient } = await import("@supabase/supabase-js");
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-      if (result.error) {
-        setError(result.error.message);
-      } else {
-        onSuccess();
+      if (supabaseUrl && supabaseKey) {
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        let result;
+        if (isSignUp) {
+          result = await supabase.auth.signUp({
+            email: formData.email,
+            password: formData.password,
+            options: {
+              data: { username: formData.username },
+            },
+          });
+        } else {
+          result = await supabase.auth.signInWithPassword({
+            email: formData.email,
+            password: formData.password,
+          });
+        }
+
+        if (result.error) {
+          setError(result.error.message);
+        } else {
+          onSuccess();
+        }
       }
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center px-4">

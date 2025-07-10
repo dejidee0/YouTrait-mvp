@@ -1,10 +1,23 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { LOTTIE_ANIMATIONS } from "../lib/constants";
 
 export default function WelcomeScreen({ onContinue }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center px-4">
       <motion.div
@@ -20,12 +33,9 @@ export default function WelcomeScreen({ onContinue }) {
           transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
           className="mb-8"
         >
-          <Player
-            autoplay
-            loop
-            src={LOTTIE_ANIMATIONS.WELCOME}
-            className="w-32 h-32 mx-auto"
-          />
+          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-4xl font-bold text-white">
+            YT
+          </div>
         </motion.div>
 
         {/* Title */}
