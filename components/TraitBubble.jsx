@@ -24,26 +24,22 @@ export default function TraitBubble({
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       transition={{ delay, duration: 0.3 }}
       onClick={onClick}
       className={`relative cursor-pointer ${sizeClasses[size]}`}
     >
-      {/* Main bubble */}
       <div
-        className={`relative w-full h-full rounded-full flex items-center justify-center font-semibold text-white shadow-md transition-all duration-300 ${
+        className={`relative w-full h-full rounded-full flex flex-col items-center justify-center font-semibold text-white shadow-md text-center leading-tight transition-all duration-300 ${
           isActive ? "ring-4 ring-gray-300" : ""
         }`}
         style={{ backgroundColor: color }}
       >
-        <span className="text-center leading-tight px-2">{trait}</span>
-
-        {/* Endorsement badge */}
+        <span className="px-2">{trait}</span>
         {endorsements > 0 && (
-          <div className="absolute -top-2 -right-2 bg-yellow-300 text-gray-800 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow">
+          <span className="text-[10px] mt-1 font-normal text-white">
             {endorsements}
-          </div>
+          </span>
         )}
       </div>
     </motion.div>

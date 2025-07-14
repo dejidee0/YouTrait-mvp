@@ -19,9 +19,9 @@ export default function TraitCloud() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-800 relative overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23d1d5db%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23d1d5db%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10 pointer-events-none z-0" />
 
       {/* Header */}
       <div className="relative z-10 text-center py-8 px-4">
@@ -35,14 +35,19 @@ export default function TraitCloud() {
 
       {/* Trait Grid */}
       <div className="relative z-10 px-4 pb-16">
-        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-items-center">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 justify-items-center">
           {traits.map((trait, index) => (
             <motion.div
               key={trait.name}
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
+              animate={{ y: ["0%", "-8%", "0%"] }}
+              transition={{
+                duration: 2 + Math.random() * 1.5,
+                repeat: Infinity,
+                repeatType: "loop",
+                ease: "easeInOut",
+                type: "tween",
+              }}
               whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300 }}
               className="w-full flex justify-center"
             >
               <TraitBubble
