@@ -30,10 +30,8 @@ export default function TraitSelection({ onComplete }) {
 
   const handleAISuggestions = async () => {
     if (!bio.trim()) return;
-
     setLoading(true);
     try {
-      // Fallback suggestions for now
       const fallbackSuggestions = [
         "creative",
         "empathetic",
@@ -58,31 +56,31 @@ export default function TraitSelection({ onComplete }) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-500 text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4 py-8">
+    <div className="min-h-screen bg-white px-4 py-10">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Choose Your Traits
           </h2>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-600 text-lg">
             Select {selectedTraits.length}/10 traits that define who you are
           </p>
         </div>
 
         {/* Bio input for AI suggestions */}
-        <div className="mb-8 max-w-md mx-auto">
-          <Label htmlFor="bio" className="text-white mb-2 block">
+        <div className="mb-10 max-w-md mx-auto">
+          <Label htmlFor="bio" className="text-gray-800 mb-2 block">
             Tell us about yourself (optional)
           </Label>
           <div className="flex gap-2">
@@ -91,21 +89,21 @@ export default function TraitSelection({ onComplete }) {
               placeholder="I'm a creative person who loves..."
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+              className="border border-gray-300 text-gray-800 placeholder-gray-400 bg-white"
             />
             <Button
               onClick={handleAISuggestions}
               disabled={loading || !bio.trim()}
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6"
+              className="bg-black text-white px-6 hover:bg-gray-900"
             >
               {loading ? "..." : "AI"}
             </Button>
           </div>
         </div>
 
-        {/* Selected traits display */}
-        <div className="mb-8">
-          <h3 className="text-white text-xl font-semibold mb-4 text-center">
+        {/* Selected traits */}
+        <div className="mb-10">
+          <h3 className="text-gray-900 text-xl font-semibold mb-4 text-center">
             Your Selected Traits
           </h3>
           <div className="flex flex-wrap gap-4 justify-center min-h-[100px] items-center">
@@ -128,9 +126,9 @@ export default function TraitSelection({ onComplete }) {
           </div>
         </div>
 
-        {/* Available traits */}
-        <div className="mb-8">
-          <h3 className="text-white text-xl font-semibold mb-4 text-center">
+        {/* Suggested traits */}
+        <div className="mb-10">
+          <h3 className="text-gray-900 text-xl font-semibold mb-4 text-center">
             Available Traits
           </h3>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 justify-items-center">
@@ -148,16 +146,16 @@ export default function TraitSelection({ onComplete }) {
           </div>
         </div>
 
-        {/* Progress and continue */}
+        {/* Progress & button */}
         <div className="text-center">
           <div className="mb-4">
-            <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
               <div
-                className="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+                className="bg-black h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(selectedTraits.length / 10) * 100}%` }}
               />
             </div>
-            <p className="text-gray-300 text-sm">
+            <p className="text-gray-500 text-sm">
               {selectedTraits.length}/10 traits selected
             </p>
           </div>
@@ -165,7 +163,7 @@ export default function TraitSelection({ onComplete }) {
           <Button
             onClick={handleComplete}
             disabled={selectedTraits.length < 3}
-            className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-xl disabled:opacity-50"
+            className="bg-black text-white px-8 py-3 rounded-xl font-semibold disabled:opacity-50"
           >
             {selectedTraits.length < 3
               ? "Select at least 3 traits"

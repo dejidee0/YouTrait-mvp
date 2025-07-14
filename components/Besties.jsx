@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Heart, Flame, Calendar, Users } from "lucide-react";
-import { Player } from "@lottiefiles/react-lottie-player";
 
 export default function Besties() {
   const [besties, setBesties] = useState([]);
@@ -14,7 +13,6 @@ export default function Besties() {
   });
 
   useEffect(() => {
-    // Sample besties data
     const sampleBesties = [
       {
         id: 1,
@@ -54,44 +52,44 @@ export default function Besties() {
   }, []);
 
   const getStreakIcon = (streak) => {
-    if (streak >= 7) return <Flame className="text-orange-400" size={20} />;
-    if (streak >= 3) return <Heart className="text-red-400" size={20} />;
+    if (streak >= 7) return <Flame className="text-orange-500" size={20} />;
+    if (streak >= 3) return <Heart className="text-red-500" size={20} />;
     return <Heart className="text-gray-400" size={20} />;
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="max-w-2xl mx-auto px-4 py-6 text-gray-800">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold text-white mb-2">
-          <Heart className="inline mr-2 text-red-400" size={32} />
+        <h2 className="text-4xl font-bold mb-2">
+          <Heart className="inline mr-2 text-red-500" size={32} />
           Besties
         </h2>
-        <p className="text-gray-300">Your closest trait connections</p>
+        <p className="text-gray-500">Your closest trait connections</p>
       </div>
 
       {/* Streak Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-black/30 backdrop-blur-md rounded-xl p-4 text-center">
-          <Flame className="text-orange-400 mx-auto mb-2" size={24} />
-          <p className="text-white font-bold text-2xl">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <Flame className="text-orange-500 mx-auto mb-2" size={24} />
+          <p className="text-gray-800 font-bold text-2xl">
             {streakData.currentStreak}
           </p>
-          <p className="text-gray-300 text-sm">Current Streak</p>
+          <p className="text-gray-500 text-sm">Current Streak</p>
         </div>
-        <div className="bg-black/30 backdrop-blur-md rounded-xl p-4 text-center">
-          <Calendar className="text-purple-400 mx-auto mb-2" size={24} />
-          <p className="text-white font-bold text-2xl">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <Calendar className="text-purple-500 mx-auto mb-2" size={24} />
+          <p className="text-gray-800 font-bold text-2xl">
             {streakData.longestStreak}
           </p>
-          <p className="text-gray-300 text-sm">Longest Streak</p>
+          <p className="text-gray-500 text-sm">Longest Streak</p>
         </div>
-        <div className="bg-black/30 backdrop-blur-md rounded-xl p-4 text-center">
-          <Users className="text-green-400 mx-auto mb-2" size={24} />
-          <p className="text-white font-bold text-2xl">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <Users className="text-green-500 mx-auto mb-2" size={24} />
+          <p className="text-gray-800 font-bold text-2xl">
             {streakData.totalExchanges}
           </p>
-          <p className="text-gray-300 text-sm">Total Exchanges</p>
+          <p className="text-gray-500 text-sm">Total Exchanges</p>
         </div>
       </div>
 
@@ -103,7 +101,7 @@ export default function Besties() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-black/30 backdrop-blur-md rounded-xl p-6"
+            className="bg-white border border-gray-200 rounded-xl p-6"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -112,7 +110,7 @@ export default function Besties() {
                     {bestie.name[0]}
                   </div>
                   <div
-                    className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-black ${
+                    className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white ${
                       bestie.status === "online"
                         ? "bg-green-400"
                         : "bg-gray-400"
@@ -120,32 +118,32 @@ export default function Besties() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg">
+                  <h3 className="text-gray-800 font-semibold text-lg">
                     {bestie.name}
                   </h3>
-                  <p className="text-gray-400">@{bestie.username}</p>
+                  <p className="text-gray-500">@{bestie.username}</p>
                 </div>
               </div>
 
               <div className="text-center">
                 <div className="flex items-center gap-1 mb-1">
                   {getStreakIcon(bestie.streakCount)}
-                  <span className="text-white font-bold">
+                  <span className="text-gray-800 font-bold">
                     {bestie.streakCount}
                   </span>
                 </div>
-                <p className="text-gray-400 text-sm">day streak</p>
+                <p className="text-gray-500 text-sm">day streak</p>
               </div>
             </div>
 
             {/* Mutual Traits */}
             <div className="mb-4">
-              <p className="text-gray-300 text-sm mb-2">Mutual Traits:</p>
+              <p className="text-gray-500 text-sm mb-2">Mutual Traits:</p>
               <div className="flex flex-wrap gap-2">
                 {bestie.mutualTraits.map((trait) => (
                   <span
                     key={trait}
-                    className="bg-purple-600/30 text-purple-200 px-3 py-1 rounded-full text-sm"
+                    className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm"
                   >
                     {trait}
                   </span>
@@ -166,7 +164,7 @@ export default function Besties() {
         ))}
       </div>
 
-      {/* Add Bestie Button */}
+      {/* Add Bestie CTA */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

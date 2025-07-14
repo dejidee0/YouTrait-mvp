@@ -24,41 +24,28 @@ export default function TraitBubble({
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      whileHover={{ scale: 1.1, rotate: 5 }}
+      whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       transition={{ delay, duration: 0.3 }}
       onClick={onClick}
-      className={`${sizeClasses[size]} relative cursor-pointer`}
+      className={`relative cursor-pointer ${sizeClasses[size]}`}
     >
-      {/* Glow effect */}
-      <div
-        className="absolute inset-0 rounded-full opacity-50 blur-sm"
-        style={{ backgroundColor: color }}
-      />
-
       {/* Main bubble */}
       <div
-        className={`relative w-full h-full rounded-full flex items-center justify-center text-white font-bold shadow-lg transition-all duration-300 ${
-          isActive ? "ring-4 ring-white/50" : ""
+        className={`relative w-full h-full rounded-full flex items-center justify-center font-semibold text-white shadow-md transition-all duration-300 ${
+          isActive ? "ring-4 ring-gray-300" : ""
         }`}
         style={{ backgroundColor: color }}
       >
         <span className="text-center leading-tight px-2">{trait}</span>
 
-        {/* Endorsement count */}
+        {/* Endorsement badge */}
         {endorsements > 0 && (
-          <div className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+          <div className="absolute -top-2 -right-2 bg-yellow-300 text-gray-800 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow">
             {endorsements}
           </div>
         )}
       </div>
-
-      {/* Orbit effect */}
-      <motion.div
-        className="absolute inset-0 rounded-full border-2 border-white/20"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-      />
     </motion.div>
   );
 }

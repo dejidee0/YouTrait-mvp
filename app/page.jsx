@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
-// Dynamic imports to prevent SSR issues
+// Dynamic imports
 const WelcomeScreen = dynamic(() => import("../components/WelcomeScreen"), {
   ssr: false,
 });
@@ -27,13 +27,9 @@ const Notifications = dynamic(() => import("../components/Notifications"), {
 });
 const Profile = dynamic(() => import("../components/Profile"), { ssr: false });
 
-// Dynamic store import
+// Dynamic store and supabase import
 const useStore = dynamic(
   () => import("../lib/store").then((mod) => ({ default: mod.useStore })),
-  { ssr: false }
-);
-const supabase = dynamic(
-  () => import("../lib/supabase").then((mod) => ({ default: mod.supabase })),
   { ssr: false }
 );
 
@@ -50,7 +46,6 @@ export default function HomePage() {
   useEffect(() => {
     if (!mounted) return;
 
-    // Check for existing session
     const checkSession = async () => {
       try {
         const { createClient } = await import("@supabase/supabase-js");
@@ -59,6 +54,7 @@ export default function HomePage() {
 
         if (supabaseUrl && supabaseKey) {
           const supabase = createClient(supabaseUrl, supabaseKey);
+
           const {
             data: { session },
           } = await supabase.auth.getSession();
@@ -67,12 +63,11 @@ export default function HomePage() {
             setCurrentStep("main");
           }
 
-          // Listen for auth changes
           const {
             data: { subscription },
           } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === "SIGNED_IN") {
-              setUser(session.user);
+              setUser(session?.user);
               setCurrentStep("traits");
             } else if (event === "SIGNED_OUT") {
               setUser(null);
@@ -90,17 +85,10 @@ export default function HomePage() {
     checkSession();
   }, [mounted]);
 
-  const handleWelcomeContinue = () => {
-    setCurrentStep("auth");
-  };
-
-  const handleAuthSuccess = () => {
-    setCurrentStep("traits");
-  };
-
+  const handleWelcomeContinue = () => setCurrentStep("auth");
+  const handleAuthSuccess = () => setCurrentStep("traits");
   const handleTraitSelectionComplete = (selectedTraits) => {
-    // In a real app, save traits to database
-    console.log("Selected traits:", selectedTraits);
+    console.log("Selected traits:", selectedTraits); // Persist if needed
     setCurrentStep("main");
   };
 
@@ -123,27 +111,19 @@ export default function HomePage() {
     }
   };
 
-  // Show loading state until mounted
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-500 text-xl">Loading...</div>
       </div>
     );
   }
 
-  // Render different steps
-  if (currentStep === "welcome") {
+  if (currentStep === "welcome")
     return <WelcomeScreen onContinue={handleWelcomeContinue} />;
-  }
-
-  if (currentStep === "auth") {
-    return <AuthForm onSuccess={handleAuthSuccess} />;
-  }
-
-  if (currentStep === "traits") {
+  if (currentStep === "auth") return <AuthForm onSuccess={handleAuthSuccess} />;
+  if (currentStep === "traits")
     return <TraitSelection onComplete={handleTraitSelectionComplete} />;
-  }
 
   if (currentStep === "main") {
     return (

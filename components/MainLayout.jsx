@@ -17,30 +17,30 @@ export default function MainLayout({ children, activeTab, onTabChange }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Header */}
-      <div className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="px-4 py-4">
-          <h1 className="text-2xl font-bold text-white text-center">
-            YOU<span className="text-yellow-400">TRAIT</span>
+          <h1 className="text-2xl font-bold text-center text-gray-900">
+            YOU<span className="text-purple-500">TRAIT</span>
           </h1>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Page Content */}
       <div className="pb-20">{children}</div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black/30 backdrop-blur-md border-t border-white/10">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-t z-50">
         <div className="flex justify-around items-center py-2">
           {tabs.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
               onClick={() => onTabChange(id)}
-              className={`flex flex-col items-center p-2 rounded-xl transition-all duration-300 ${
+              className={`flex flex-col items-center p-2 rounded-xl transition-all duration-200 ${
                 activeTab === id
-                  ? "text-yellow-400 bg-yellow-400/20"
-                  : "text-gray-400 hover:text-white"
+                  ? "text-purple-600 font-semibold"
+                  : "text-gray-500 hover:text-purple-500"
               }`}
             >
               <div className="relative">

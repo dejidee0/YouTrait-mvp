@@ -12,14 +12,14 @@ export default function WelcomeScreen({ onContinue }) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-600 text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 relative">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,7 +33,7 @@ export default function WelcomeScreen({ onContinue }) {
           transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
           className="mb-8"
         >
-          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-4xl font-bold text-white">
+          <div className="w-32 h-32 mx-auto bg-black text-white rounded-full flex items-center justify-center text-4xl font-bold shadow-md">
             YT
           </div>
         </motion.div>
@@ -43,9 +43,9 @@ export default function WelcomeScreen({ onContinue }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-6xl font-bold text-white mb-4"
+          className="text-6xl font-bold text-gray-900 mb-4"
         >
-          YOU<span className="text-yellow-400">TRAIT</span>
+          YOU<span className="text-yellow-500">TRAIT</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -53,7 +53,7 @@ export default function WelcomeScreen({ onContinue }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="text-xl text-gray-300 mb-12 max-w-md mx-auto"
+          className="text-lg text-gray-600 mb-12 max-w-md mx-auto"
         >
           Discover yourself through traits, not images. Connect with your true
           identity.
@@ -67,7 +67,7 @@ export default function WelcomeScreen({ onContinue }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onContinue}
-          className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-12 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+          className="bg-black text-white px-12 py-4 rounded-full text-lg font-medium shadow hover:bg-gray-900 transition-all duration-300"
         >
           Continue
         </motion.button>
@@ -90,7 +90,7 @@ export default function WelcomeScreen({ onContinue }) {
                   delay: index * 0.5,
                   ease: "easeOut",
                 }}
-                className="absolute text-white/40 text-sm font-medium"
+                className="absolute text-gray-400 text-sm font-medium"
                 style={{
                   left: `${20 + index * 15}%`,
                   top: `${60 + index * 10}%`,

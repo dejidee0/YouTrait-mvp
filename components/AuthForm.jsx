@@ -65,24 +65,24 @@ export default function AuthForm({ onSuccess }) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-500 text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-black/50 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md"
+        className="bg-white/90 shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-200"
       >
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
             {isSignUp ? "Join YOUTRAIT" : "Welcome Back"}
           </h2>
-          <p className="text-gray-300">
+          <p className="text-gray-500">
             {isSignUp
               ? "Create your trait identity"
               : "Sign in to your account"}
@@ -92,7 +92,7 @@ export default function AuthForm({ onSuccess }) {
         <form onSubmit={handleSubmit} className="space-y-6">
           {isSignUp && (
             <div>
-              <Label htmlFor="username" className="text-white mb-2 block">
+              <Label htmlFor="username" className="text-gray-700 mb-2 block">
                 Username
               </Label>
               <Input
@@ -103,14 +103,14 @@ export default function AuthForm({ onSuccess }) {
                 onChange={(e) =>
                   setFormData({ ...formData, username: e.target.value })
                 }
-                className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+                className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
                 required
               />
             </div>
           )}
 
           <div>
-            <Label htmlFor="email" className="text-white mb-2 block">
+            <Label htmlFor="email" className="text-gray-700 mb-2 block">
               Email
             </Label>
             <Input
@@ -121,13 +121,13 @@ export default function AuthForm({ onSuccess }) {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+              className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="password" className="text-white mb-2 block">
+            <Label htmlFor="password" className="text-gray-700 mb-2 block">
               Password
             </Label>
             <Input
@@ -138,17 +138,17 @@ export default function AuthForm({ onSuccess }) {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+              className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
               required
             />
           </div>
 
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl"
+            className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl"
           >
             {loading ? "Loading..." : isSignUp ? "Create Account" : "Sign In"}
           </Button>
@@ -157,7 +157,7 @@ export default function AuthForm({ onSuccess }) {
         <div className="mt-6 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-gray-300 hover:text-white transition-colors"
+            className="text-sm text-gray-500 hover:text-purple-600 transition-colors"
           >
             {isSignUp
               ? "Already have an account? Sign in"

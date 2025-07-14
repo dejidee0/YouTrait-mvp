@@ -16,7 +16,6 @@ export default function Feed() {
   const [showNewPost, setShowNewPost] = useState(false);
   const { user } = useStore();
 
-  // Sample posts data
   useEffect(() => {
     const samplePosts = [
       {
@@ -72,7 +71,7 @@ export default function Feed() {
       user: {
         name: user?.user_metadata?.username || "You",
         username: user?.user_metadata?.username || "you",
-        traits: ["creative", "authentic", "bold"], // This would come from user data
+        traits: ["creative", "authentic", "bold"],
       },
       content: newPost,
       musicLink: musicLink || null,
@@ -88,12 +87,12 @@ export default function Feed() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="max-w-2xl mx-auto px-4 py-6 bg-white min-h-screen">
       {/* New Post Button */}
       <div className="mb-6">
         <Button
           onClick={() => setShowNewPost(!showNewPost)}
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl"
+          className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-medium py-3 rounded-xl"
         >
           What's on your mind?
         </Button>
@@ -104,31 +103,31 @@ export default function Feed() {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="bg-black/30 backdrop-blur-md rounded-xl p-6 mb-6"
+          className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 mb-6 shadow-sm"
         >
           <Textarea
             placeholder="Share your thoughts..."
             value={newPost}
             onChange={(e) => setNewPost(e.target.value)}
-            className="bg-white/10 border-white/20 text-white placeholder-gray-400 mb-4 min-h-[100px]"
+            className="bg-white border border-zinc-300 text-zinc-800 placeholder-zinc-400 mb-4 min-h-[100px]"
           />
           <Input
             placeholder="Add music (optional)"
             value={musicLink}
             onChange={(e) => setMusicLink(e.target.value)}
-            className="bg-white/10 border-white/20 text-white placeholder-gray-400 mb-4"
+            className="bg-white border border-zinc-300 text-zinc-800 placeholder-zinc-400 mb-4"
           />
           <div className="flex gap-2">
             <Button
               onClick={handlePostSubmit}
-              className="bg-green-500 hover:bg-green-600 text-white px-6"
+              className="bg-zinc-900 hover:bg-zinc-800 text-white px-6"
             >
               Post
             </Button>
             <Button
               onClick={() => setShowNewPost(false)}
               variant="outline"
-              className="text-white border-white/20 hover:bg-white/10"
+              className="border-zinc-300 text-zinc-700 hover:bg-zinc-100"
             >
               Cancel
             </Button>
@@ -144,55 +143,55 @@ export default function Feed() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-black/30 backdrop-blur-md rounded-xl p-6"
+            className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm"
           >
             {/* User Info */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold">
                   {post.user.name[0]}
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">{post.user.name}</h3>
-                  <p className="text-gray-400 text-sm">@{post.user.username}</p>
+                  <h3 className="text-zinc-900 font-semibold">
+                    {post.user.name}
+                  </h3>
+                  <p className="text-zinc-500 text-sm">@{post.user.username}</p>
                 </div>
               </div>
-              <span className="text-gray-400 text-sm">{post.timestamp}</span>
+              <span className="text-zinc-400 text-sm">{post.timestamp}</span>
             </div>
 
             {/* User Traits */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-4 flex-wrap">
               {post.user.traits.map((trait) => (
                 <TraitBubble key={trait} trait={trait} size="sm" />
               ))}
             </div>
 
             {/* Content */}
-            <p className="text-white mb-4 text-lg leading-relaxed">
+            <p className="text-zinc-800 mb-4 text-base leading-relaxed">
               {post.content}
             </p>
 
             {/* Music */}
             {post.musicLink && (
-              <div className="bg-purple-600/20 rounded-lg p-3 mb-4 flex items-center gap-2">
-                <Music size={16} className="text-purple-400" />
-                <span className="text-purple-300 text-sm">
-                  {post.musicLink}
-                </span>
+              <div className="bg-zinc-100 border border-zinc-200 rounded-lg p-3 mb-4 flex items-center gap-2">
+                <Music size={16} className="text-zinc-500" />
+                <span className="text-zinc-600 text-sm">{post.musicLink}</span>
               </div>
             )}
 
             {/* Actions */}
             <div className="flex items-center gap-6">
-              <button className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition-colors">
+              <button className="flex items-center gap-2 text-zinc-500 hover:text-red-500 transition-colors">
                 <Heart size={20} />
                 <span>{post.likes}</span>
               </button>
-              <button className="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition-colors">
+              <button className="flex items-center gap-2 text-zinc-500 hover:text-blue-500 transition-colors">
                 <MessageCircle size={20} />
                 <span>{post.comments}</span>
               </button>
-              <button className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors">
+              <button className="flex items-center gap-2 text-zinc-500 hover:text-green-500 transition-colors">
                 <Share size={20} />
               </button>
             </div>
