@@ -27,12 +27,6 @@ const Notifications = dynamic(() => import("../components/Notifications"), {
 });
 const Profile = dynamic(() => import("../components/Profile"), { ssr: false });
 
-// Dynamic store and supabase import
-const useStore = dynamic(
-  () => import("../lib/store").then((mod) => ({ default: mod.useStore })),
-  { ssr: false }
-);
-
 export default function HomePage() {
   const [currentStep, setCurrentStep] = useState("welcome");
   const [activeTab, setActiveTab] = useState("feed");
@@ -54,21 +48,39 @@ export default function HomePage() {
 
         if (supabaseUrl && supabaseKey) {
           const supabase = createClient(supabaseUrl, supabaseKey);
-
           const {
             data: { session },
           } = await supabase.auth.getSession();
-          if (session) {
+
+          if (session?.user) {
             setUser(session.user);
-            setCurrentStep("main");
+
+            const { data: userData } = await supabase.auth.getUser();
+            const hasSelectedTraits =
+              userData?.user?.user_metadata?.hasSelectedTraits;
+
+            if (hasSelectedTraits) {
+              setCurrentStep("main");
+            } else {
+              setCurrentStep("traits");
+            }
           }
 
           const {
             data: { subscription },
-          } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === "SIGNED_IN") {
-              setUser(session?.user);
-              setCurrentStep("traits");
+          } = supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === "SIGNED_IN" && session?.user) {
+              setUser(session.user);
+
+              const { data: userData } = await supabase.auth.getUser();
+              const hasSelectedTraits =
+                userData?.user?.user_metadata?.hasSelectedTraits;
+
+              if (hasSelectedTraits) {
+                setCurrentStep("main");
+              } else {
+                setCurrentStep("traits");
+              }
             } else if (event === "SIGNED_OUT") {
               setUser(null);
               setCurrentStep("welcome");
@@ -86,10 +98,32 @@ export default function HomePage() {
   }, [mounted]);
 
   const handleWelcomeContinue = () => setCurrentStep("auth");
+
   const handleAuthSuccess = () => setCurrentStep("traits");
-  const handleTraitSelectionComplete = (selectedTraits) => {
-    console.log("Selected traits:", selectedTraits); // Persist if needed
-    setCurrentStep("main");
+
+  const handleTraitSelectionComplete = async (selectedTraits) => {
+    console.log("Selected traits:", selectedTraits);
+
+    try {
+      const { createClient } = await import("@supabase/supabase-js");
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (supabaseUrl && supabaseKey) {
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Save to user metadata
+        await supabase.auth.updateUser({
+          data: {
+            hasSelectedTraits: true,
+          },
+        });
+
+        setCurrentStep("main");
+      }
+    } catch (error) {
+      console.error("Failed to update user metadata:", error);
+    }
   };
 
   const renderTabContent = () => {
@@ -119,11 +153,17 @@ export default function HomePage() {
     );
   }
 
-  if (currentStep === "welcome")
+  if (currentStep === "welcome") {
     return <WelcomeScreen onContinue={handleWelcomeContinue} />;
-  if (currentStep === "auth") return <AuthForm onSuccess={handleAuthSuccess} />;
-  if (currentStep === "traits")
+  }
+
+  if (currentStep === "auth") {
+    return <AuthForm onSuccess={handleAuthSuccess} />;
+  }
+
+  if (currentStep === "traits") {
     return <TraitSelection onComplete={handleTraitSelectionComplete} />;
+  }
 
   if (currentStep === "main") {
     return (
