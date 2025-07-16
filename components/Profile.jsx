@@ -60,60 +60,51 @@ export default function Profile() {
   if (!profile) return null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="max-w-2xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
       {/* Profile Header */}
       <div className="text-center mb-8">
         <div className="relative inline-block mb-4">
-          <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold text-3xl shadow-md">
+          <div className="w-24 h-24 rounded-full bg-muted text-white flex items-center justify-center font-bold text-3xl shadow-md">
             {profile.name[0]}
           </div>
-          <button className="absolute -bottom-2 -right-2 bg-yellow-400 text-black p-2 rounded-full shadow">
+          <button className="absolute -bottom-2 -right-2 bg-yellow-400 text-black p-2 rounded-full shadow hover:scale-105 transition">
             <Edit3 size={16} />
           </button>
         </div>
-
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">
           {profile.name}
         </h1>
-        <p className="text-gray-500 mb-2">@{profile.username}</p>
-        <p className="text-gray-600 max-w-md mx-auto">{profile.bio}</p>
+        <p className="text-gray-200 mb-2 text-sm">@{profile.username}</p>
+        <p className="text-gray-200 text-sm max-w-md mx-auto">{profile.bio}</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border rounded-xl p-4 text-center shadow-sm">
-          <Users className="text-blue-500 mx-auto mb-2" size={20} />
-          <p className="text-gray-900 font-bold text-lg">
-            {profile.stats.friends}
-          </p>
-          <p className="text-gray-500 text-xs">Friends</p>
-        </div>
-        <div className="bg-white border rounded-xl p-4 text-center shadow-sm">
-          <Award className="text-yellow-500 mx-auto mb-2" size={20} />
-          <p className="text-gray-900 font-bold text-lg">
-            {profile.stats.endorsements}
-          </p>
-          <p className="text-gray-500 text-xs">Endorsements</p>
-        </div>
-        <div className="bg-white border rounded-xl p-4 text-center shadow-sm">
-          <Edit3 className="text-green-500 mx-auto mb-2" size={20} />
-          <p className="text-gray-900 font-bold text-lg">
-            {profile.stats.posts}
-          </p>
-          <p className="text-gray-500 text-xs">Posts</p>
-        </div>
-        <div className="bg-white border rounded-xl p-4 text-center shadow-sm">
-          <div className="text-orange-500 mx-auto mb-2 text-lg">🔥</div>
-          <p className="text-gray-900 font-bold text-lg">
-            {profile.stats.streaks}
-          </p>
-          <p className="text-gray-500 text-xs">Streaks</p>
-        </div>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <StatCard
+          icon={<Users size={20} />}
+          label="Friends"
+          value={profile.stats.friends}
+        />
+        <StatCard
+          icon={<Award size={20} />}
+          label="Endorsements"
+          value={profile.stats.endorsements}
+        />
+        <StatCard
+          icon={<Edit3 size={20} />}
+          label="Posts"
+          value={profile.stats.posts}
+        />
+        <StatCard
+          icon={<div className="text-orange-500 text-lg">🔥</div>}
+          label="Streaks"
+          value={profile.stats.streaks}
+        />
       </div>
 
       {/* Trait Orbit */}
       <div className="mb-8">
-        <h3 className="text-gray-800 text-xl font-semibold mb-4 text-center">
+        <h3 className="text-gray-200 text-xl font-semibold mb-4 text-center">
           Your Trait Universe
         </h3>
         <TraitOrbit
@@ -124,12 +115,12 @@ export default function Profile() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-4 mb-8">
-        <Button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-xl">
+      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <Button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl">
           <Share className="mr-2" size={16} />
           Share Profile
         </Button>
-        <Button className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-xl">
+        <Button className="flex-1 bg-zinc-200 hover:bg-zinc-300 text-zinc-800 py-3 rounded-xl">
           <Settings className="mr-2" size={16} />
           Settings
         </Button>
@@ -137,12 +128,12 @@ export default function Profile() {
 
       {/* Tabs */}
       <div className="mb-6">
-        <div className="flex bg-gray-200 rounded-xl p-1">
+        <div className="flex bg-zinc-200 rounded-xl p-1 overflow-x-auto">
           {["posts", "traits", "stories"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors whitespace-nowrap ${
                 activeTab === tab
                   ? "bg-white text-gray-900 shadow"
                   : "text-gray-500 hover:text-gray-700"
@@ -155,7 +146,7 @@ export default function Profile() {
       </div>
 
       {/* Tab Content */}
-      <div className="mb-8">
+      <div className="mb-10">
         {activeTab === "posts" && (
           <div className="space-y-4">
             {profile.posts.map((post, index) => (
@@ -163,7 +154,7 @@ export default function Profile() {
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.05 }}
                 className="bg-white border rounded-xl p-4 shadow-sm"
               >
                 <p className="text-gray-800 mb-2">{post.content}</p>
@@ -193,7 +184,7 @@ export default function Profile() {
         )}
       </div>
 
-      {/* Sign Out Button */}
+      {/* Sign Out */}
       <div className="text-center">
         <button
           onClick={handleSignOut}
@@ -202,6 +193,17 @@ export default function Profile() {
           Sign Out
         </button>
       </div>
+    </div>
+  );
+}
+
+// Sub-component for Stats
+function StatCard({ icon, label, value }) {
+  return (
+    <div className="bg-white border rounded-xl p-4 text-center shadow-sm">
+      <div className="text-purple-600 mx-auto mb-2">{icon}</div>
+      <p className="text-gray-900 font-bold text-lg">{value}</p>
+      <p className="text-gray-500 text-xs">{label}</p>
     </div>
   );
 }

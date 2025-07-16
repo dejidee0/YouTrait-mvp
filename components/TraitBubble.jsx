@@ -12,10 +12,10 @@ export default function TraitBubble({
   delay = 0,
 }) {
   const sizeClasses = {
-    sm: "w-16 h-16 text-xs",
-    md: "w-20 h-20 text-sm",
-    lg: "w-24 h-24 text-base",
-    xl: "w-32 h-32 text-lg",
+    sm: "w-16 h-16 text-[10px]",
+    md: "w-20 h-20 text-xs",
+    lg: "w-24 h-24 text-sm",
+    xl: "w-32 h-32 text-base",
   };
 
   const color = TRAIT_COLORS[trait.length % TRAIT_COLORS.length];
@@ -35,7 +35,12 @@ export default function TraitBubble({
         }`}
         style={{ backgroundColor: color }}
       >
-        <span className="px-2">{trait}</span>
+        <span
+          className="px-2 max-w-full truncate overflow-hidden whitespace-nowrap"
+          title={trait}
+        >
+          {trait}
+        </span>
         {endorsements > 0 && (
           <span className="text-[10px] mt-1 font-normal text-white">
             {endorsements}

@@ -87,7 +87,7 @@ export default function Feed() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 bg-white min-h-screen">
+    <div className="max-w-2xl mx-auto px-4 py-6 min-h-screen">
       {/* New Post Button */}
       <div className="mb-6">
         <Button
@@ -143,7 +143,7 @@ export default function Feed() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm"
+            className="bg-gray-200 border border-zinc-200 rounded-xl p-6 shadow-sm"
           >
             {/* User Info */}
             <div className="flex items-center justify-between mb-4">
@@ -174,12 +174,12 @@ export default function Feed() {
             </p>
 
             {/* Music */}
-            {post.musicLink && (
+            {/* {post.musicLink && (
               <div className="bg-zinc-100 border border-zinc-200 rounded-lg p-3 mb-4 flex items-center gap-2">
                 <Music size={16} className="text-zinc-500" />
                 <span className="text-zinc-600 text-sm">{post.musicLink}</span>
               </div>
-            )}
+            )} */}
 
             {/* Actions */}
             <div className="flex items-center gap-6">

@@ -48,11 +48,11 @@ export default function Games() {
     <div className="max-w-2xl mx-auto px-4 py-6 text-gray-800">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold mb-2">
+        <h2 className="text-4xl text-white font-bold mb-2">
           <Zap className="inline mr-2 text-yellow-500" size={32} />
           Word Battle Royale
         </h2>
-        <p className="text-gray-500">Most endorsed traits today</p>
+        <p className="text-gray-100">Most endorsed traits today</p>
       </div>
 
       {/* User Rank */}

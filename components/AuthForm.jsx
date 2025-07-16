@@ -6,6 +6,39 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
+const bubbleVariants = {
+  animate: {
+    y: [0, -20, 0],
+    x: [0, 20, 0],
+    transition: {
+      duration: 6,
+      repeat: Infinity,
+      repeatType: "reverse",
+      ease: "easeInOut",
+    },
+  },
+};
+
+const bubbleColors = [
+  "bg-pink-400",
+  "bg-purple-400",
+  "bg-indigo-400",
+  "bg-fuchsia-500",
+  "bg-purple-600",
+  "bg-pink-600",
+  "bg-violet-500",
+];
+
+const generateBubbles = (count = 10) =>
+  Array.from({ length: count }, (_, i) => ({
+    id: i,
+    size: Math.floor(Math.random() * 60) + 20,
+    color: bubbleColors[Math.floor(Math.random() * bubbleColors.length)],
+    top: Math.random() * 100,
+    left: Math.random() * 100,
+    delay: Math.random() * 5,
+  }));
+
 export default function AuthForm({ onSuccess }) {
   const [isSignUp, setIsSignUp] = useState(true);
   const [formData, setFormData] = useState({
@@ -17,8 +50,11 @@ export default function AuthForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  const [bubbles, setBubbles] = useState([]);
+
   useEffect(() => {
     setMounted(true);
+    setBubbles(generateBubbles(12)); // generate 12 bubbles
   }, []);
 
   const handleSubmit = async (e) => {
@@ -28,33 +64,31 @@ export default function AuthForm({ onSuccess }) {
 
     try {
       const { createClient } = await import("@supabase/supabase-js");
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      );
 
-      if (supabaseUrl && supabaseKey) {
-        const supabase = createClient(supabaseUrl, supabaseKey);
+      let result;
+      if (isSignUp) {
+        result = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: { username: formData.username },
+          },
+        });
+      } else {
+        result = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+      }
 
-        let result;
-        if (isSignUp) {
-          result = await supabase.auth.signUp({
-            email: formData.email,
-            password: formData.password,
-            options: {
-              data: { username: formData.username },
-            },
-          });
-        } else {
-          result = await supabase.auth.signInWithPassword({
-            email: formData.email,
-            password: formData.password,
-          });
-        }
-
-        if (result.error) {
-          setError(result.error.message);
-        } else {
-          onSuccess();
-        }
+      if (result.error) {
+        setError(result.error.message);
+      } else {
+        onSuccess();
       }
     } catch (err) {
       setError(err.message);
@@ -65,24 +99,42 @@ export default function AuthForm({ onSuccess }) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-500 text-xl">Loading...</div>
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
+        Loading...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex items-center justify-center px-4">
+    <div className="relative min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-[#2a0845] via-[#6441a5] to-[#1c1c1c] overflow-hidden">
+      {/* Bouncing Bubbles */}
+      {bubbles.map((bubble) => (
+        <motion.div
+          key={bubble.id}
+          variants={bubbleVariants}
+          animate="animate"
+          className={`absolute rounded-full opacity-30 ${bubble.color}`}
+          style={{
+            width: bubble.size,
+            height: bubble.size,
+            top: `${bubble.top}%`,
+            left: `${bubble.left}%`,
+            zIndex: 1,
+          }}
+        />
+      ))}
+
+      {/* Form */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/90 shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-200"
+        className="relative w-full max-w-md p-8 rounded-2xl shadow-2xl border border-white/20 bg-white/10 backdrop-blur-md text-white z-10"
       >
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+          <h2 className="text-3xl font-bold mb-2 drop-shadow-sm">
             {isSignUp ? "Join YOUTRAIT" : "Welcome Back"}
           </h2>
-          <p className="text-gray-500">
+          <p className="text-sm text-white/70">
             {isSignUp
               ? "Create your trait identity"
               : "Sign in to your account"}
@@ -92,7 +144,7 @@ export default function AuthForm({ onSuccess }) {
         <form onSubmit={handleSubmit} className="space-y-6">
           {isSignUp && (
             <div>
-              <Label htmlFor="username" className="text-gray-700 mb-2 block">
+              <Label htmlFor="username" className="text-white/80 block mb-1">
                 Username
               </Label>
               <Input
@@ -103,14 +155,14 @@ export default function AuthForm({ onSuccess }) {
                 onChange={(e) =>
                   setFormData({ ...formData, username: e.target.value })
                 }
-                className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
                 required
+                className="bg-white/10 border-white/20 text-white placeholder-white/50 focus:ring-purple-400"
               />
             </div>
           )}
 
           <div>
-            <Label htmlFor="email" className="text-gray-700 mb-2 block">
+            <Label htmlFor="email" className="text-white/80 block mb-1">
               Email
             </Label>
             <Input
@@ -121,13 +173,13 @@ export default function AuthForm({ onSuccess }) {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
               required
+              className="bg-white/10 border-white/20 text-white placeholder-white/50 focus:ring-purple-400"
             />
           </div>
 
           <div>
-            <Label htmlFor="password" className="text-gray-700 mb-2 block">
+            <Label htmlFor="password" className="text-white/80 block mb-1">
               Password
             </Label>
             <Input
@@ -138,17 +190,17 @@ export default function AuthForm({ onSuccess }) {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
               required
+              className="bg-white/10 border-white/20 text-white placeholder-white/50 focus:ring-purple-400"
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-red-400 text-sm">{error}</p>}
 
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl"
+            className="w-full bg-gradient-to-r from-fuchsia-600 to-indigo-700 hover:from-fuchsia-700 hover:to-indigo-800 text-white font-semibold py-3 rounded-xl"
           >
             {loading ? "Loading..." : isSignUp ? "Create Account" : "Sign In"}
           </Button>
@@ -157,7 +209,7 @@ export default function AuthForm({ onSuccess }) {
         <div className="mt-6 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-sm text-gray-500 hover:text-purple-600 transition-colors"
+            className="text-sm text-white/60 hover:text-white transition-colors"
           >
             {isSignUp
               ? "Already have an account? Sign in"
